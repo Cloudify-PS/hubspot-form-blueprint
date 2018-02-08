@@ -1,0 +1,44 @@
+tosca_definitions_version: cloudify_dsl_1_3
+
+###################################################
+# Requires secrets or should be provided via inputs
+#
+# SG_Token
+# admin_name
+# admin_email
+
+
+inputs:
+  hubspot_form:
+    type: string
+    default: "e6ac3e17-cdbf-43cd-8455-d993965ec064"
+  hubspot_portal:
+    type: string
+    default: "1918719"
+
+  FirstName:
+    default: "FirstTest"
+  LastName:
+    default: "LastTest"
+  Company:
+    default: "ComapnyTest"
+  Email:
+    default: "testing@cloudify.co"
+
+
+imports:
+  - http://www.getcloudify.org/spec/cloudify/4.2/types.yaml
+  - https://raw.githubusercontent.com/Cloudify-PS/cloudify-rest-plugin/master/plugin.yaml
+  - components/HubSpot/types.yaml
+
+node_templates:
+  hs_registration:
+    type: hubspot.form.Submit
+    properties:
+      portal_id: { get_input: hubspot_portal }
+      form_guid: { get_input: hubspot_form }
+      params:
+              FirstName: { get_input: FirstName }
+              LastName: { get_input: LastName }
+              Company: { get_input: Company }
+              Email: { get_input: Email }
